@@ -1,10 +1,10 @@
-package com.uk02.rmw;
+package com.uk02.rmw.controllers;
 
 import com.uk02.rmw.config.jwt.JwtService;
 import com.uk02.rmw.dtos.AuthenticationRequest;
 import com.uk02.rmw.dtos.AuthenticationResponse;
 import com.uk02.rmw.models.User;
-import com.uk02.rmw.service.UserService;
+import com.uk02.rmw.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
