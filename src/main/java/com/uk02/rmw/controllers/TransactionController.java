@@ -29,8 +29,6 @@ public class TransactionController {
     @GetMapping("list")
     public ResponseEntity<Object> listTransactions(@AuthenticationPrincipal User user) {
         List<Transaction> transactions = transactionService.listTransactionByUser(user);
-        System.out.println(transactions.size());
-
         return ResponseEntity.ok(transactions);
     }
 }

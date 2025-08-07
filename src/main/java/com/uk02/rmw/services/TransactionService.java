@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -63,13 +62,7 @@ public class TransactionService {
     }
 
     public List<Transaction> listTransactionByUser(User user) {
-        List<Account> accounts = accountRepository.findByUser_Id(user.getId());
-        List<Transaction> transactions = new ArrayList<>();
-        for (Account account : accounts) {
-            transactions.addAll(transactionRepository.findByAccount_Id(account.getId()));
-        }
-
-        return transactions;
+        return transactionRepository.findByUserIdWithDetails(user.getId());
     }
 
     public List<Transaction> listTransactionsByCategoryId(Long categoryId, User user) {
@@ -77,7 +70,7 @@ public class TransactionService {
                 .filter(cat -> cat.getUser() == null || cat.getUser().getId().equals(user.getId()))
                 .orElseThrow(() -> new RuntimeException("Category not found or does not belong to user"));
 
-        return transactionRepository.findByCategory_Id(categoryId);
+        return transactionRepository.findByCategoryIdWithDetails(categoryId);
     }
 
 
