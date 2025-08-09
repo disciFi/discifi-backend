@@ -1,6 +1,7 @@
 package com.uk02.rmw.controllers;
 
 import com.uk02.rmw.dtos.TransactionDTO;
+import com.uk02.rmw.dtos.TransactionResponseDTO;
 import com.uk02.rmw.models.Transaction;
 import com.uk02.rmw.models.User;
 import com.uk02.rmw.services.TransactionService;
@@ -30,5 +31,24 @@ public class TransactionController {
     public ResponseEntity<Object> listTransactions(@AuthenticationPrincipal User user) {
         List<Transaction> transactions = transactionService.listTransactionByUser(user);
         return ResponseEntity.ok(transactions);
+    }
+
+    @PutMapping("/{transactionId}")
+    public ResponseEntity<TransactionResponseDTO> updateTransaction(
+        @PathVariable Long transactionId,
+        @Valid @RequestBody TransactionDTO transactionDTO,
+        @AuthenticationPrincipal User user
+    ) {
+        TransactionResponseDTO updatedTransaction = transactionService.updateTransaction(transactionId, transactionDTO, user);
+        return ResponseEntity.ok(updatedTransaction);
+    }
+
+    @DeleteMapping("/{transactionId}")
+    public ResponseEntity<Void> deleteTransaction(
+        @PathVariable Long transactionId,
+        @AuthenticationPrincipal User user
+    ) {
+        transactionService.deleteTransaction(transactionId, user);
+        return ResponseEntity.noContent().build();
     }
 }

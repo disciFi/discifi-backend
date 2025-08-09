@@ -10,8 +10,9 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Query("SELECT t FROM Transaction t JOIN FETCH t.account JOIN FETCH t.category WHERE t.category.id = :categoryId")
-    List<Transaction> findByCategoryIdWithDetails(Long categoryId);
+    // fetch the transactions that are of particular category from all the accounts that belong to the current user
+    @Query("SELECT t FROM Transaction t JOIN FETCH t.account JOIN FETCH t.category WHERE t.category.id = :categoryId AND t.account.id IN :accountIds")
+    List<Transaction> findByCategoryIdWithDetails(Long categoryId, List<Long> accountIds);
 
     @Query("SELECT t FROM Transaction t JOIN FETCH t.account JOIN FETCH t.category WHERE t.account.id = :accountId")
     List<Transaction> findByAccountIdWithDetails(Long accountId);
@@ -21,4 +22,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @Query("SELECT t FROM Transaction t WHERE t.account.user.id = :userId AND t.type = 'Expense' AND t.date BETWEEN :start AND :end")
     List<Transaction> findUserExpensesBetweenDates(Long userId, LocalDate start, LocalDate end);
+
+
 }
