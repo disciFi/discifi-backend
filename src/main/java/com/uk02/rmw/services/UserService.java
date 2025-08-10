@@ -1,5 +1,6 @@
 package com.uk02.rmw.services;
 
+import com.uk02.rmw.dtos.UserResponseDTO;
 import com.uk02.rmw.models.User;
 import com.uk02.rmw.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,22 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
 
         return user;
+    }
+
+    public void changePassword(User user, String oldPassword, String newPassword) {
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new IllegalStateException("Incorrect old password.");
+        }
+
+        if (oldPassword.equals(newPassword)) {
+            throw new IllegalStateException("New password cannot be the same as the old password");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    public UserResponseDTO getUserDetails(User user) {
+        return new UserResponseDTO(user.getId(), user.getUsername(), user.getEmail());
     }
 }
