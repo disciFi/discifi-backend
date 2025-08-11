@@ -41,4 +41,27 @@ public class AccountController {
         List<Transaction> transactions = transactionService.listTransactionsByAccountId(account_id, user);
         return ResponseEntity.ok(transactions);
     }
+
+    @PutMapping("/{accountId}")
+    public ResponseEntity<Account> updateAccount(
+            @PathVariable Long accountId,
+            @RequestBody Account accountDetails,
+            @AuthenticationPrincipal User user
+    ) {
+        Account updatedAccount = accountService.updateAccount(accountId, accountDetails, user);
+        return ResponseEntity.ok(updatedAccount);
+    }
+
+    @DeleteMapping("/{accountId}")
+    public ResponseEntity<String> deleteAccount(
+            @PathVariable Long accountId,
+            @AuthenticationPrincipal User user
+    ) {
+        try {
+            accountService.deleteAccount(accountId, user);
+            return ResponseEntity.ok().body("Account deleted successfully");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

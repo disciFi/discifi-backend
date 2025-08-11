@@ -41,4 +41,27 @@ public class CategoryController {
         return ResponseEntity.ok(transactions);
     }
 
+    @PutMapping("/{categoryId}")
+    public ResponseEntity<Category> updateCategory(
+            @PathVariable Long categoryId,
+            @RequestBody Category categoryDetails,
+            @AuthenticationPrincipal User user
+    ) {
+        Category updatedCategory = categoryService.updateCategory(categoryId, categoryDetails, user);
+        return ResponseEntity.ok(updatedCategory);
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<String> deleteCategory(
+            @PathVariable Long categoryId,
+            @AuthenticationPrincipal User user
+    ) {
+        try {
+            categoryService.deleteCategory(categoryId, user);
+            return ResponseEntity.ok().body("Category deleted successfully.");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
