@@ -1,5 +1,6 @@
 package com.uk02.rmw.controllers;
 
+import com.uk02.rmw.dtos.BalanceAdjustmentDTO;
 import com.uk02.rmw.models.Account;
 import com.uk02.rmw.models.Transaction;
 import com.uk02.rmw.models.User;
@@ -59,9 +60,24 @@ public class AccountController {
     ) {
         try {
             accountService.deleteAccount(accountId, user);
-            return ResponseEntity.ok().body("Account deleted successfully");
+            return ResponseEntity.ok().body("Account deleted successfully.");
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PutMapping("/{accountId}/adjust-balance")
+    public ResponseEntity<String> adjustBalance(
+            @PathVariable Long accountId,
+            @RequestBody BalanceAdjustmentDTO adjustmentDTO,
+            @AuthenticationPrincipal User user
+    ) {
+        try {
+            accountService.applyBalanceAdjustment(accountId, adjustmentDTO, user);
+            return ResponseEntity.ok().body("Account balance updated successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

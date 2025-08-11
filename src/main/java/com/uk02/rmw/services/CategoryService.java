@@ -34,7 +34,6 @@ public class CategoryService {
                 .orElseThrow(() -> new RuntimeException("Custom category not found or access denied"));
 
         category.setName(categoryDetails.getName());
-        category.setType(categoryDetails.getType());
 
         return categoryRepository.save(category);
     }

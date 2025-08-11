@@ -1,12 +1,19 @@
 package com.uk02.rmw.services;
 
+import com.uk02.rmw.dtos.BalanceAdjustmentDTO;
 import com.uk02.rmw.models.Account;
+import com.uk02.rmw.models.Category;
+import com.uk02.rmw.models.Transaction;
 import com.uk02.rmw.models.User;
 import com.uk02.rmw.repositories.AccountRepository;
+import com.uk02.rmw.repositories.CategoryRepository;
 import com.uk02.rmw.repositories.TransactionRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -15,6 +22,7 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+    private final CategoryRepository categoryRepository;
 
     public Account createAccount(Account account, User user) {
         account.setUser(user);
@@ -46,5 +54,27 @@ public class AccountService {
         }
 
         accountRepository.delete(account);
+    }
+
+    @Transactional
+    public void applyBalanceAdjustment(Long accountId, BalanceAdjustmentDTO dto, User user) {
+        Account account = accountRepository.findById(accountId)
+                .filter(acc -> acc.getUser().getId().equals(user.getId()))
+                .orElseThrow(() -> new RuntimeException("Account not found or does not belong to user"));
+
+        account.setBalance(account.getBalance().add(dto.amount()));
+        accountRepository.save(account);
+        Category adjustmentCategory = categoryRepository.findByName("Balance Adjustment");
+
+        Transaction adjustmentTransaction = Transaction.builder()
+                .title("Adjustment: " + dto.reason())
+                .amount(dto.amount().abs())
+                .type(dto.amount().compareTo(BigDecimal.ZERO) >= 0 ? "Income" : "Expense")
+                .date(LocalDate.now())
+                .account(account)
+                .category(adjustmentCategory)
+                .build();
+
+        transactionRepository.save(adjustmentTransaction);
     }
 }

@@ -23,14 +23,15 @@ public class DataSeeder implements CommandLineRunner {
 
     private void seedCategories() {
         List<Category> defaultCategories = Arrays.asList(
-                Category.builder().name("Salary").type("Income").build(),
-                Category.builder().name("Gifts").type("Income").build(),
-                Category.builder().name("Food & Dining").type("Expense").build(),
-                Category.builder().name("Transport").type("Expense").build(),
-                Category.builder().name("Shopping").type("Expense").build(),
-                Category.builder().name("Utilities").type("Expense").build(),
-                Category.builder().name("Housing").type("Expense").build(),
-                Category.builder().name("Entertainment").type("Expense").build()
+                Category.builder().name("Salary").build(),
+                Category.builder().name("Gifts").build(),
+                Category.builder().name("Food & Dining").build(),
+                Category.builder().name("Transport").build(),
+                Category.builder().name("Shopping").build(),
+                Category.builder().name("Utilities").build(),
+                Category.builder().name("Housing").build(),
+                Category.builder().name("Entertainment").build(),
+                Category.builder().name("Balance Adjustment").build()
         );
 
         categoryRepository.saveAll(defaultCategories);
