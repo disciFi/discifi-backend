@@ -80,4 +80,12 @@ public class AccountController {
         }
     }
 
+    @PostMapping("/{accountId}/restore")
+    public ResponseEntity<Account> restoreAccount(
+            @PathVariable Long accountId,
+            @AuthenticationPrincipal User user
+    ) {
+        Account account = accountService.restoreAccount(accountId, user);
+        return ResponseEntity.ok(account);
+    }
 }

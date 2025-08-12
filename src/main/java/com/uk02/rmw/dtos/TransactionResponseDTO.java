@@ -1,5 +1,7 @@
 package com.uk02.rmw.dtos;
 
+import com.uk02.rmw.enums.RecurrencePeriod;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -12,5 +14,8 @@ public record TransactionResponseDTO (
     Long accountId,
     String accountName,
     Long categoryId,
-    String categoryName
+    String categoryName,
+    Boolean isRecurrence,
+    RecurrencePeriod recurrencePeriod,
+    LocalDate nextRecurrenceDate
 ) { }

@@ -1,5 +1,6 @@
 package com.uk02.rmw.models;
 
+import com.uk02.rmw.enums.RecurrencePeriod;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,14 @@ public class Transaction {
 
     @Column(nullable = false)
     private LocalDate date;
+
+    @Column(nullable = false)
+    private Boolean isRecurring = false;
+
+    @Enumerated(EnumType.STRING)
+    private RecurrencePeriod recurrencePeriod;
+
+    private LocalDate nextRecurrenceDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false)

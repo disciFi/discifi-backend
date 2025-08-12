@@ -53,6 +53,15 @@ public class AccountService {
         accountRepository.save(account);
     }
 
+    public Account restoreAccount(Long accountId, User user) {
+        Account account = accountRepository.findById(accountId)
+                .filter(acc -> acc.getUser().getId().equals(user.getId()) && !acc.getActive())
+                .orElseThrow(() -> new RuntimeException("Account not found or already active or access denied"));
+
+        account.setActive(true);
+        return accountRepository.save(account);
+    }
+
     @Transactional
     public void applyBalanceAdjustment(Long accountId, BalanceAdjustmentDTO dto, User user) {
         Account account = accountRepository.findById(accountId)

@@ -1,5 +1,6 @@
 package com.uk02.rmw.dtos;
 
+import com.uk02.rmw.enums.RecurrencePeriod;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -13,6 +14,8 @@ public record TransactionDTO (
         @NotEmpty String type,
         @NotNull LocalDate date,
         @NotNull Long accountId,
-        @NotNull Long categoryId
+        @NotNull Long categoryId,
+        Boolean isRecurrence,
+        RecurrencePeriod recurrencePeriod
 ) {
 }

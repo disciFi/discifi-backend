@@ -2,6 +2,7 @@ package com.uk02.rmw.services;
 
 import com.uk02.rmw.dtos.TransactionDTO;
 import com.uk02.rmw.dtos.TransactionResponseDTO;
+import com.uk02.rmw.enums.RecurrencePeriod;
 import com.uk02.rmw.models.Account;
 import com.uk02.rmw.models.Category;
 import com.uk02.rmw.models.Transaction;
@@ -13,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -22,6 +24,15 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
     private final CategoryRepository categoryRepository;
+
+    protected LocalDate calculateNextDate(LocalDate currentDate, RecurrencePeriod period) {
+        if (period == null) return null;
+        return switch (period) {
+            case WEEKLY -> currentDate.plusWeeks(1);
+            case MONTHLY -> currentDate.plusMonths(1);
+            case YEARLY -> currentDate.plusYears(1);
+        };
+    }
 
     @Transactional
     public Transaction createTransaction(TransactionDTO dto, User user) {
@@ -47,7 +58,13 @@ public class TransactionService {
                 .date(dto.date())
                 .account(account)
                 .category(category)
+                .isRecurring(dto.isRecurrence())
+                .recurrencePeriod(dto.recurrencePeriod())
                 .build();
+
+        if (transaction.getIsRecurring()) {
+            transaction.setNextRecurrenceDate(calculateNextDate(transaction.getDate(), transaction.getRecurrencePeriod()));
+        }
 
         return transactionRepository.save(transaction);
     }
@@ -93,6 +110,12 @@ public class TransactionService {
         existingTransaction.setDate(dto.date());
         existingTransaction.setAccount(currentAccount);
         existingTransaction.setCategory(currentCategory);
+        existingTransaction.setIsRecurring(dto.isRecurrence());
+        existingTransaction.setRecurrencePeriod(dto.recurrencePeriod());
+
+        if (existingTransaction.getIsRecurring()) {
+            existingTransaction.setNextRecurrenceDate(calculateNextDate(existingTransaction.getDate(), existingTransaction.getRecurrencePeriod()));
+        }
 
         Transaction updatedTransaction = transactionRepository.save(existingTransaction);
 
@@ -105,7 +128,10 @@ public class TransactionService {
                 updatedTransaction.getAccount().getId(),
                 updatedTransaction.getAccount().getName(),
                 updatedTransaction.getCategory().getId(),
-                updatedTransaction.getCategory().getName()
+                updatedTransaction.getCategory().getName(),
+                updatedTransaction.getIsRecurring(),
+                updatedTransaction.getRecurrencePeriod(),
+                updatedTransaction.getNextRecurrenceDate()
         );
     }
 
