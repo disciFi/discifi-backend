@@ -30,13 +30,13 @@ public class AccountService {
     }
 
     public List<Account> getAccountsForUser(User user) {
-        return accountRepository.findByUser_Id(user.getId());
+        return accountRepository.findByUser_IdAndActive(user.getId(), true);
     }
 
     public Account updateAccount(Long accountId, Account accountDetails, User user) {
         Account account = accountRepository.findById(accountId)
-                .filter(acc -> acc.getUser().getId().equals(user.getId()))
-                .orElseThrow(() -> new RuntimeException("Account not found or access denied"));
+                .filter(acc -> acc.getUser().getId().equals(user.getId()) && acc.getActive())
+                .orElseThrow(() -> new RuntimeException("Account not found or inactive or access denied"));
 
         account.setName(accountDetails.getName());
         account.setType(accountDetails.getType());
@@ -47,20 +47,17 @@ public class AccountService {
     public void deleteAccount(Long accountId, User user) {
         Account account = accountRepository.findById(accountId)
                 .filter(acc -> acc.getUser().getId().equals(user.getId()))
-                .orElseThrow(() -> new RuntimeException("Account not found or access denied"));
+                .orElseThrow(() -> new RuntimeException("Account not found or inactive or access denied"));
 
-        if (!transactionRepository.findByAccountIdWithDetails(accountId).isEmpty()) {
-            throw new IllegalStateException("Cannot delete account with existing transactions.");
-        }
-
-        accountRepository.delete(account);
+        account.setActive(false);
+        accountRepository.save(account);
     }
 
     @Transactional
     public void applyBalanceAdjustment(Long accountId, BalanceAdjustmentDTO dto, User user) {
         Account account = accountRepository.findById(accountId)
-                .filter(acc -> acc.getUser().getId().equals(user.getId()))
-                .orElseThrow(() -> new RuntimeException("Account not found or does not belong to user"));
+                .filter(acc -> acc.getUser().getId().equals(user.getId()) && acc.getActive())
+                .orElseThrow(() -> new RuntimeException("Account not found or inactive or access denied"));
 
         account.setBalance(account.getBalance().add(dto.amount()));
         accountRepository.save(account);

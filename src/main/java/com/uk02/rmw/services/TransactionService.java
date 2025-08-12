@@ -132,8 +132,8 @@ public class TransactionService {
 
     public List<Transaction> listTransactionsByAccountId(Long accountId, User user) {
         accountRepository.findById(accountId)
-                .filter(acc -> acc.getUser().getId().equals(user.getId()))
-                .orElseThrow(() -> new RuntimeException("Account not found or does not belong to user"));
+                .filter(acc -> acc.getUser().getId().equals(user.getId()) && acc.getActive())
+                .orElseThrow(() -> new RuntimeException("Account not found or inactive or does not belong to user"));
 
         return transactionRepository.findByAccountIdWithDetails(accountId);
     }
@@ -142,12 +142,8 @@ public class TransactionService {
         categoryRepository.findById(categoryId)
                 .filter(cat -> cat.getUser() == null || cat.getUser().getId().equals(user.getId()))
                 .orElseThrow(() -> new RuntimeException("Category not found or does not belong to user"));
-        List<Long> accountIds = accountRepository.findByUser_Id(user.getId())
-                .stream()
-                .map(Account::getId)
-                .toList();
 
-        return transactionRepository.findByCategoryIdWithDetails(categoryId, accountIds);
+        return transactionRepository.findByCategoryIdWithDetails(categoryId, user.getId());
     }
 
 }

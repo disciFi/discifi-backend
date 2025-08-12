@@ -33,6 +33,9 @@ public class Account {
     @Column(nullable = false)
     private String currency;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
