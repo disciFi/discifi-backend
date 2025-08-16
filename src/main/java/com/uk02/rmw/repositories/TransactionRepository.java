@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,4 +25,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findUserExpensesBetweenDates(Long userId, LocalDate start, LocalDate end);
 
     List<Transaction> findByIsRecurringTrueAndNextRecurrenceDateLessThanEqual(LocalDate date);
+
+    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.account.user.id = :userId AND t.account.active = true AND t.category.id = :categoryId AND t.type = 'Expense' AND FUNCTION('TO_CHAR', t.date, 'YYYY-MM') = :period")
+    BigDecimal sumExpensesByCategoryIdAndPeriod(Long userId, Long categoryId, String period);
+
 }
