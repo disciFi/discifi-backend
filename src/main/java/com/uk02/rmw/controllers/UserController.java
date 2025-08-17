@@ -1,7 +1,7 @@
 package com.uk02.rmw.controllers;
 
-import com.uk02.rmw.dtos.PasswordChangeDTO;
-import com.uk02.rmw.dtos.UserResponseDTO;
+import com.uk02.rmw.dtos.authentication.PasswordChangeDTO;
+import com.uk02.rmw.dtos.authentication.UserResponseDTO;
 import com.uk02.rmw.models.User;
 import com.uk02.rmw.services.UserService;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.uk02.rmw.dtos;
+package com.uk02.rmw.dtos.transactions;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

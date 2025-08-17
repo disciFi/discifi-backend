@@ -1,8 +1,8 @@
 package com.uk02.rmw.controllers;
 
 import com.uk02.rmw.config.jwt.JwtService;
-import com.uk02.rmw.dtos.AuthenticationRequest;
-import com.uk02.rmw.dtos.AuthenticationResponse;
+import com.uk02.rmw.dtos.authentication.AuthenticationRequest;
+import com.uk02.rmw.dtos.authentication.AuthenticationResponse;
 import com.uk02.rmw.models.User;
 import com.uk02.rmw.services.UserService;
 import lombok.RequiredArgsConstructor;

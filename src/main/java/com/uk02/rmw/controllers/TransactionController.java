@@ -1,7 +1,7 @@
 package com.uk02.rmw.controllers;
 
-import com.uk02.rmw.dtos.TransactionDTO;
-import com.uk02.rmw.dtos.TransactionResponseDTO;
+import com.uk02.rmw.dtos.transactions.TransactionDTO;
+import com.uk02.rmw.dtos.transactions.TransactionResponseDTO;
 import com.uk02.rmw.models.Transaction;
 import com.uk02.rmw.models.User;
 import com.uk02.rmw.services.TransactionService;

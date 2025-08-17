@@ -1,4 +1,4 @@
-package com.uk02.rmw.dtos;
+package com.uk02.rmw.dtos.transactions;
 
 import com.uk02.rmw.enums.RecurrencePeriod;
 

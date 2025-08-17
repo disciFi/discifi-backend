@@ -1,4 +1,4 @@
-package com.uk02.rmw.dtos;
+package com.uk02.rmw.dtos.authentication;
 
 import lombok.Data;
 

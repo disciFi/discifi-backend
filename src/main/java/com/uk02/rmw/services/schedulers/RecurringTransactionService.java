@@ -1,8 +1,9 @@
-package com.uk02.rmw.services;
+package com.uk02.rmw.services.schedulers;
 
-import com.uk02.rmw.dtos.TransactionDTO;
+import com.uk02.rmw.dtos.transactions.TransactionDTO;
 import com.uk02.rmw.models.Transaction;
 import com.uk02.rmw.repositories.TransactionRepository;
+import com.uk02.rmw.services.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

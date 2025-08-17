@@ -1,6 +1,6 @@
 package com.uk02.rmw.services;
 
-import com.uk02.rmw.dtos.UserResponseDTO;
+import com.uk02.rmw.dtos.authentication.UserResponseDTO;
 import com.uk02.rmw.models.User;
 import com.uk02.rmw.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;

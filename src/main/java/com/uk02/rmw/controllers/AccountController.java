@@ -1,6 +1,6 @@
 package com.uk02.rmw.controllers;
 
-import com.uk02.rmw.dtos.BalanceAdjustmentDTO;
+import com.uk02.rmw.dtos.transactions.BalanceAdjustmentDTO;
 import com.uk02.rmw.models.Account;
 import com.uk02.rmw.models.Transaction;
 import com.uk02.rmw.models.User;

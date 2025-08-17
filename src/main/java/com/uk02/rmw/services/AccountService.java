@@ -1,6 +1,6 @@
 package com.uk02.rmw.services;
 
-import com.uk02.rmw.dtos.BalanceAdjustmentDTO;
+import com.uk02.rmw.dtos.transactions.BalanceAdjustmentDTO;
 import com.uk02.rmw.models.Account;
 import com.uk02.rmw.models.Category;
 import com.uk02.rmw.models.Transaction;
@@ -79,6 +79,8 @@ public class AccountService {
                 .date(LocalDate.now())
                 .account(account)
                 .category(adjustmentCategory)
+                .isRecurring(false)
+                .recurrencePeriod(null)
                 .build();
 
         transactionRepository.save(adjustmentTransaction);

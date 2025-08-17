@@ -1,7 +1,7 @@
 package com.uk02.rmw.controllers;
 
-import com.uk02.rmw.dtos.BudgetRequestDTO;
-import com.uk02.rmw.dtos.BudgetResponseDTO;
+import com.uk02.rmw.dtos.budgets.BudgetRequestDTO;
+import com.uk02.rmw.dtos.budgets.BudgetResponseDTO;
 import com.uk02.rmw.models.Budget;
 import com.uk02.rmw.models.User;
 import com.uk02.rmw.services.BudgetService;

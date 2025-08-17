@@ -1,7 +1,7 @@
 package com.uk02.rmw.services;
 
-import com.uk02.rmw.dtos.TransactionDTO;
-import com.uk02.rmw.dtos.TransactionResponseDTO;
+import com.uk02.rmw.dtos.transactions.TransactionDTO;
+import com.uk02.rmw.dtos.transactions.TransactionResponseDTO;
 import com.uk02.rmw.enums.RecurrencePeriod;
 import com.uk02.rmw.models.Account;
 import com.uk02.rmw.models.Category;
@@ -25,7 +25,7 @@ public class TransactionService {
     private final AccountRepository accountRepository;
     private final CategoryRepository categoryRepository;
 
-    protected LocalDate calculateNextDate(LocalDate currentDate, RecurrencePeriod period) {
+    public LocalDate calculateNextDate(LocalDate currentDate, RecurrencePeriod period) {
         if (period == null) return null;
         return switch (period) {
             case WEEKLY -> currentDate.plusWeeks(1);
@@ -58,7 +58,7 @@ public class TransactionService {
                 .date(dto.date())
                 .account(account)
                 .category(category)
-                .isRecurring(dto.isRecurrence())
+                .isRecurring(dto.isRecurring())
                 .recurrencePeriod(dto.recurrencePeriod())
                 .build();
 
@@ -110,7 +110,7 @@ public class TransactionService {
         existingTransaction.setDate(dto.date());
         existingTransaction.setAccount(currentAccount);
         existingTransaction.setCategory(currentCategory);
-        existingTransaction.setIsRecurring(dto.isRecurrence());
+        existingTransaction.setIsRecurring(dto.isRecurring());
         existingTransaction.setRecurrencePeriod(dto.recurrencePeriod());
 
         if (existingTransaction.getIsRecurring()) {

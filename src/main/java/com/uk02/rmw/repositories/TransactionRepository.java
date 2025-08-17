@@ -21,7 +21,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("SELECT t FROM Transaction t JOIN FETCH t.account JOIN FETCH t.category WHERE t.account.user.id = :userId AND t.account.active = true")
     List<Transaction> findByUserIdWithDetails(Long userId);
 
-    @Query("SELECT t FROM Transaction t WHERE t.account.user.id = :userId AND t.type = 'Expense' AND t.date BETWEEN :start AND :end AND t.account.active = true")
+    @Query("SELECT t FROM Transaction t JOIN FETCH t.category WHERE t.account.user.id = :userId AND t.type = 'Expense' AND t.date BETWEEN :start AND :end AND t.account.active = true")
     List<Transaction> findUserExpensesBetweenDates(Long userId, LocalDate start, LocalDate end);
 
     List<Transaction> findByIsRecurringTrueAndNextRecurrenceDateLessThanEqual(LocalDate date);

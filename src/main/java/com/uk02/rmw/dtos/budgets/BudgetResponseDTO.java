@@ -1,4 +1,4 @@
-package com.uk02.rmw.dtos;
+package com.uk02.rmw.dtos.budgets;
 
 import java.math.BigDecimal;
 import java.time.YearMonth;
