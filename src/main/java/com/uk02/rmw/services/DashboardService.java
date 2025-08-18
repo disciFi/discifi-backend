@@ -25,7 +25,11 @@ public class DashboardService {
         BigDecimal thisWeekSpend = calculateSpendForPeriod(user.getId(), today.with(DayOfWeek.MONDAY), today.with(DayOfWeek.SUNDAY));
         BigDecimal thisMonthSpend = calculateSpendForPeriod(user.getId(), today.withDayOfMonth(1), today.withDayOfMonth(today.lengthOfMonth()));
 
-        return new DashboardDTO(todaySpend, thisWeekSpend, thisMonthSpend);
+        BigDecimal previousDaySpend = calculateSpendForPeriod(user.getId(), today.minusDays(1), today.minusDays(1));
+        BigDecimal previousWeekSpend = calculateSpendForPeriod(user.getId(), today.minusWeeks(1).with(DayOfWeek.MONDAY), today.minusWeeks(1).with(DayOfWeek.SUNDAY));
+        BigDecimal previousMonthSpend = calculateSpendForPeriod(user.getId(), today.minusMonths(1).withDayOfMonth(1), today.minusMonths(1).withDayOfMonth(today.minusMonths(1).lengthOfMonth()));
+
+        return new DashboardDTO(todaySpend, thisWeekSpend, thisMonthSpend, previousDaySpend, previousWeekSpend, previousMonthSpend);
     }
 
     private BigDecimal calculateSpendForPeriod(Long userId, LocalDate startDate, LocalDate endDate) {

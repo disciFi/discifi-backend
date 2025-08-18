@@ -5,5 +5,8 @@ import java.math.BigDecimal;
 public record DashboardDTO (
         BigDecimal todaySpend,
         BigDecimal thisWeekSpend,
-        BigDecimal thisMonthSpend
+        BigDecimal thisMonthSpend,
+        BigDecimal previousDaySpend,
+        BigDecimal previousWeekSpend,
+        BigDecimal previousMonthSpend
 ) { }
