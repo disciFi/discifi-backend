@@ -25,7 +25,9 @@ public class InsightController {
             @AuthenticationPrincipal User user,
             @RequestParam("period") InsightPeriod period
     ) {
-        return ResponseEntity.ok(insightService.getFinancialInsight(user, period));
+        String insight = insightService.getFinancialInsight(user, period);
+        insightService.saveInsight(insight, user, period);
+        return ResponseEntity.ok(insight);
     }
 
     @GetMapping("/insights")

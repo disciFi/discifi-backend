@@ -2,8 +2,10 @@ package com.uk02.rmw.services;
 
 import com.uk02.rmw.Constants;
 import com.uk02.rmw.enums.InsightPeriod;
+import com.uk02.rmw.models.Insight;
 import com.uk02.rmw.models.Transaction;
 import com.uk02.rmw.models.User;
+import com.uk02.rmw.repositories.InsightRepository;
 import com.uk02.rmw.repositories.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -24,6 +26,7 @@ public class InsightService {
 
     private final OpenAiChatModel chatModel;
     private final TransactionRepository transactionRepository;
+    private final InsightRepository insightRepository;
 
     private LocalDate getStartDateForPeriod(InsightPeriod period) {
         LocalDate today = LocalDate.now();
@@ -68,5 +71,16 @@ public class InsightService {
         ));
 
         return chatModel.call(prompt).getResult().getOutput().getText();
+    }
+
+    public void saveInsight(String content, User user, InsightPeriod type) {
+        if (content != null && !content.equals(Constants.NO_TRANSACTIONS)) {
+            Insight insight = Insight.builder()
+                    .content(content)
+                    .user(user)
+                    .type(type)
+                    .build();
+            insightRepository.save(insight);
+        }
     }
 }

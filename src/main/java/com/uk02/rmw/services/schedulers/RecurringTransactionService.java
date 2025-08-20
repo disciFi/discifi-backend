@@ -4,6 +4,7 @@ import com.uk02.rmw.dtos.transactions.TransactionDTO;
 import com.uk02.rmw.models.Transaction;
 import com.uk02.rmw.repositories.TransactionRepository;
 import com.uk02.rmw.services.TransactionService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class RecurringTransactionService {
     private final TransactionService transactionService;
 
     @Scheduled(cron = "0 0 2 * * ?")
+    @Transactional
     public void processRecurringTransactions() {
         LocalDate today = LocalDate.now();
         List<Transaction> dueTransactions = transactionRepository.findByIsRecurringTrueAndNextRecurrenceDateLessThanEqual(today);
