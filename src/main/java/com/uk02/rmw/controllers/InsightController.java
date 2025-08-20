@@ -1,9 +1,8 @@
 package com.uk02.rmw.controllers;
 
+import com.uk02.rmw.dtos.insights.InsightResponseDTO;
 import com.uk02.rmw.enums.InsightPeriod;
-import com.uk02.rmw.models.Insight;
 import com.uk02.rmw.models.User;
-import com.uk02.rmw.repositories.InsightRepository;
 import com.uk02.rmw.services.InsightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,6 @@ import java.util.List;
 public class InsightController {
 
     private final InsightService insightService;
-    private final InsightRepository insightRepository;
 
     @PostMapping("/generate-insight")
     public ResponseEntity<String> generateInsight(
@@ -31,8 +29,8 @@ public class InsightController {
     }
 
     @GetMapping("/insights")
-    public ResponseEntity<List<Insight>> getInsights(@AuthenticationPrincipal User user) {
-        List<Insight> insights = insightRepository.findTop10ByUserOrderByIdDesc(user);
+    public ResponseEntity<List<InsightResponseDTO>> getInsights(@AuthenticationPrincipal User user) {
+        List<InsightResponseDTO> insights = insightService.getInsights(user);
         return ResponseEntity.ok(insights);
     }
 }

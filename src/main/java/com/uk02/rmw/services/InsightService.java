@@ -1,6 +1,7 @@
 package com.uk02.rmw.services;
 
 import com.uk02.rmw.Constants;
+import com.uk02.rmw.dtos.insights.InsightResponseDTO;
 import com.uk02.rmw.enums.InsightPeriod;
 import com.uk02.rmw.models.Insight;
 import com.uk02.rmw.models.Transaction;
@@ -82,5 +83,17 @@ public class InsightService {
                     .build();
             insightRepository.save(insight);
         }
+    }
+
+    public List<InsightResponseDTO> getInsights(User user) {
+        List<Insight> insights = insightRepository.findTop10ByUserOrderByIdDesc(user);
+        return insights.stream()
+                .map(insight -> new InsightResponseDTO(
+                        insight.getId(),
+                        insight.getContent(),
+                        insight.getGeneratedAt(),
+                        insight.getType()
+                ))
+                .collect(Collectors.toList());
     }
 }
