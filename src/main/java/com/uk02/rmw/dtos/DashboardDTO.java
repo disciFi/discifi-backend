@@ -1,5 +1,6 @@
 package com.uk02.rmw.dtos;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 public record DashboardDTO (
@@ -9,4 +10,4 @@ public record DashboardDTO (
         BigDecimal previousDaySpend,
         BigDecimal previousWeekSpend,
         BigDecimal previousMonthSpend
-) { }
+) implements Serializable { }

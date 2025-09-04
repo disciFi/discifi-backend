@@ -5,6 +5,7 @@ import com.uk02.rmw.models.Transaction;
 import com.uk02.rmw.models.User;
 import com.uk02.rmw.repositories.TransactionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ public class DashboardService {
 
     private final TransactionRepository transactionRepository;
 
+    @Cacheable("dashboardSummary")
     public DashboardDTO getDashboardSummary(User user) {
         LocalDate today = LocalDate.now();
 
