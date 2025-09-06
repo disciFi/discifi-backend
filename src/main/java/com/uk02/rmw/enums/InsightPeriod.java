@@ -1,6 +1,8 @@
 package com.uk02.rmw.enums;
 
-public enum InsightPeriod {
+import java.io.Serializable;
+
+public enum InsightPeriod implements Serializable {
     TODAY,
     WEEK,
     MONTH
