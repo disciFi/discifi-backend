@@ -1,6 +1,7 @@
 package com.uk02.rmw.controllers;
 
 import com.uk02.rmw.dtos.transactions.TransactionDTO;
+import com.uk02.rmw.dtos.transactions.TransactionDocument;
 import com.uk02.rmw.dtos.transactions.TransactionResponseDTO;
 import com.uk02.rmw.models.Transaction;
 import com.uk02.rmw.models.User;
@@ -50,5 +51,14 @@ public class TransactionController {
     ) {
         transactionService.deleteTransaction(transactionId, user);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<TransactionDocument>> searchTransactions(
+            @RequestParam("q") String query,
+            @AuthenticationPrincipal User user
+    ) {
+        List<TransactionDocument> results = transactionService.searchTransactions(query, user);
+        return ResponseEntity.ok(results);
     }
 }

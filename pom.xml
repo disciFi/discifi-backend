@@ -121,6 +121,13 @@
 			<artifactId>spring-ai-starter-model-openai</artifactId>
 			<version>1.0.1</version>
 		</dependency>
+
+<!--		search functionality-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+			<version>3.5.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>

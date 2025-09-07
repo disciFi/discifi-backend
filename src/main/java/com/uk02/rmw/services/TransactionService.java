@@ -1,6 +1,7 @@
 package com.uk02.rmw.services;
 
 import com.uk02.rmw.dtos.transactions.TransactionDTO;
+import com.uk02.rmw.dtos.transactions.TransactionDocument;
 import com.uk02.rmw.dtos.transactions.TransactionResponseDTO;
 import com.uk02.rmw.enums.RecurrencePeriod;
 import com.uk02.rmw.models.Account;
@@ -10,6 +11,8 @@ import com.uk02.rmw.models.User;
 import com.uk02.rmw.repositories.AccountRepository;
 import com.uk02.rmw.repositories.CategoryRepository;
 import com.uk02.rmw.repositories.TransactionRepository;
+import com.uk02.rmw.repositories.search.TransactionSearchRepository;
+import com.uk02.rmw.services.search.ElasticsearchSyncService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,10 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
     private final CategoryRepository categoryRepository;
+    private final TransactionSearchRepository transactionSearchRepository;
+
+    private final ElasticsearchSyncService elasticsearchSyncService;
+
 
     public LocalDate calculateNextDate(LocalDate currentDate, RecurrencePeriod period) {
         if (period == null) return null;
@@ -66,7 +73,9 @@ public class TransactionService {
             transaction.setNextRecurrenceDate(calculateNextDate(transaction.getDate(), transaction.getRecurrencePeriod()));
         }
 
-        return transactionRepository.save(transaction);
+        Transaction savedTransaction = transactionRepository.save(transaction);
+        elasticsearchSyncService.syncTransaction(savedTransaction);
+        return savedTransaction;
     }
 
     @Transactional
@@ -118,6 +127,7 @@ public class TransactionService {
         }
 
         Transaction updatedTransaction = transactionRepository.save(existingTransaction);
+        elasticsearchSyncService.syncTransaction(updatedTransaction);
 
         return new TransactionResponseDTO(
                 updatedTransaction.getId(),
@@ -170,6 +180,10 @@ public class TransactionService {
                 .orElseThrow(() -> new RuntimeException("Category not found or does not belong to user"));
 
         return transactionRepository.findByCategoryIdWithDetails(categoryId, user.getId());
+    }
+
+    public List<TransactionDocument> searchTransactions(String query, User user) {
+        return transactionSearchRepository.findByUserIdAndTitleContainingIgnoreCase(user.getId(), query);
     }
 
 }
