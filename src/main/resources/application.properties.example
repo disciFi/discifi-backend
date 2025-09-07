@@ -1,15 +1,38 @@
 spring.application.name=rmw
 
 # database configurations
-spring.datasource.url=jdbc:postgresql://localhost:5432/your-db-name
-spring.datasource.username=your-username
-spring.datasource.password=your-password
+spring.datasource.url=jdbc:postgresql://localhost:5432/db
+spring.datasource.username=root
+spring.datasource.password=1234
 
 # hibernate configurations
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.open-in-view=false
 
+# jwt settings
+application.security.jwt.secret-key=xxyy
+application.security.jwt.expiration=86400000
 
+# logging
+logging.level.org.springframework.security.config.annotation.authentication.configuration=ERROR
 
+# gemini ai configurations (used through openai)
+spring.ai.openai.api-key=api_key
+spring.ai.openai.chat.base-url=https://generativelanguage.googleapis.com
+spring.ai.openai.chat.completions-path=/v1beta/openai/chat/completions
+spring.ai.openai.chat.options.model=gemini-2.0-flash
+
+# redis configuration
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
+
+# message queue - rabbit mq config
+spring.rabbitmq.host=localhost
+spring.rabbitmq.port=5672
+spring.rabbitmq.username=guest
+spring.rabbitmq.password=guest
+
+# elastic search
+spring.elasticsearch.uris=http://localhost:9200
